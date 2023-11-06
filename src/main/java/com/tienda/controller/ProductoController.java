@@ -1,6 +1,7 @@
 package com.tienda.controller;
 
 import com.tienda.domain.Producto;
+import com.tienda.service.CategoriaService;
 import com.tienda.service.ProductoService;
 import com.tienda.service.impl.FirebaseStorageServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +21,17 @@ public class ProductoController {
     
     @Autowired
     private ProductoService productoService;
+    @Autowired
+    private CategoriaService categoriaService;
 
     @GetMapping("/listado")
     public String inicio(Model model) {
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("categorias", categorias);
         var productos = productoService.getProductos(false);
         model.addAttribute("productos", productos);
         model.addAttribute("totalProductos", productos.size());
+        
         return "/producto/listado";
     }
     
@@ -60,6 +66,8 @@ public class ProductoController {
 
     @GetMapping("/modificar/{idProducto}")
     public String productoModificar(Producto producto, Model model) {
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("categorias", categorias);
         producto = productoService.getProducto(producto);
         model.addAttribute("producto", producto);
         return "/producto/modifica";
