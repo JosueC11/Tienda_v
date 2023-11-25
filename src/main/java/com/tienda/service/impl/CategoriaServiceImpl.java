@@ -9,25 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CategoriaServiceImpl implements CategoriaService
-{
-    //La anotación autowired crea un unico objeto mientras se ejecuta la app
-    
+public class CategoriaServiceImpl implements CategoriaService {
+
+    //La anotacion autowired crea un unico objeto sin hacer new.
     @Autowired
     private CategoriaDao categoriaDao;
-    
+
     @Override
     @Transactional(readOnly = true)
-    public List<Categoria> getCategorias(boolean activos)
-    {
+    public List<Categoria> getCategorias(boolean activos) {
         var lista = categoriaDao.findAll();
-        
-        if(activos)
-        {
-            lista.removeIf(e -> !e.isActivo());                        
-        }     
+        if (activos) {
+            lista.removeIf(e -> !e.isActivo());
+        }
         return lista;
-    }    
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -47,4 +43,3 @@ public class CategoriaServiceImpl implements CategoriaService
         categoriaDao.delete(categoria);
     }
 }
-
